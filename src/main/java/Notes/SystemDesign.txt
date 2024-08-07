@@ -1,0 +1,501 @@
+1.) Estimation :
+ a.) ask for monthly request  eg :- 500 M ( new url creations )
+ b.) Read and write ratio eg :- 100 : 1 ==> R : W
+ c.) Total number of new Read Url :- 5 Billion per month url , write :- 500 M per month url
+ d.) Conversion to per seconds
+
+
+ NEW read url per sec:- 50000000000 / (30*86400) ~ 20k read /  seconds
+
+ NEW write url per sec:-  500,000,000 / (30 * 86400) ~  200 write / seconds
+
+ e.) Storage Requirements :- lets say saving data for 5 yrs
+
+  500 M * 5 * 12 ~ 30 Billion ==> total request * number of months
+
+  Assume a size of 500 bytes ==> 30 billion * 500 bytes ==>  15 TB
+
+
+  f.) N/W :-  write Bandwidth => 200 * 500 => 100 kb / sec
+      read Bandwidth ==> 20000 * 500 => 10 Mb / sec
+
+  G.) CACHE :- RAM
+      total request => 20,000 req / sec * 3600 sec * 24 => 1.7 Billion request / day
+
+      20 % cache per day ---> 20 * 100 *  1.7 Billion  * 500 byte => 170 GB
+
+
+Patterns :-
+
+ Consistent Hashing
+ Quorum
+ Leader Follower
+ Bloom filter
+ CAP Theorm
+ BASE Theorm
+ PACELC Theorm
+
+
+
+ Client - Server  => 2, 3, N tier
+ CONCEPTS --> LB, CACHING , PROXY, LONG POOLING VS WEBSOCKETS , INDEX, PARTITION , SHARDING, CDN, SQL VS NON-SQL,
+              RATE-LIMITER, MSG QUEUE, THICK VS THIN CLIENT, DATA FLOWS
+
+
+
+Kafka --> creating and processing real time stream
+
+
+Calculations :-
+
+Zeros Storage traffic
+3   KB  thousand
+6   MB  million
+9   GB  billion
+12  TB  trillion
+15  PB  Quad trillion
+
+
+1 crore --> 10 million
+1 byte ---> 8 bits
+ Peak QPS = 2 * QPS
+
+[Formula]
+
+x Million * y MB = xy TB
+ ( 6 zero )   (6 zero )
+ here TB = 6 + 6  =  12
+
+Assumption
+Char 1 byte ---> ASCII --> 1
+Char 2 byte ---> UNIOCODE --> 2
+
+image avg size = 300 Kb
+
+No. of server = ?
+Storage = ?
+RAM = ?
+
+
+TRAFFIC ESTIMATES -->
+
+    Total User  :-  1 Billion
+    DAU ( 25 % ) :- 25 % OF TOTAL USER  = 250 MILLION USER
+
+    READ AND WORITE OPS = > 5 read + 2 write =  7 query both for read and write
+     ( 250 Million * 7 ) / 86400 = 18k query / seconds
+
+
+RAM -->
+    assumption last 5 post in cache ( 1 post is of 500 Byte )
+
+     5 * 500 = 2500 --> ~ 3000 B
+    250 Million *  3 KB = 750 GB
+
+    Like 10 caching machine of 75 GB
+
+
+Storage -->
+
+1.) every user does 2 post --> 1 post is of 250 char
+    [ 1 char --> 2 byte ]
+
+     1 post = 250 * 2 byte => 500 byte
+     1 user does = > 2 *  500 byte ==>  1 KB
+
+     250 Million * 1 Kb = 250 GB post per day
+
+
+2.) 10% of user also upload 1 image ( 300kb )
+
+    250 Million * 300 Kb = 7500 GB => 7TB
+
+
+ Latency -->
+    assume 95 % --> 500ms
+
+    Assume 1 server ==> 50 threads
+
+    1 sec => 2 ( 500ms ) means 1 second m 2 request server
+    1 server ==> 100 request /second
+
+    How many server =  18k ( read +  write query)  / 100 = 180
+
+
+Load balancing algorithm :-
+
+    Static :-
+        * Round Robin
+        * Weighted Round Robin
+        * Source IP hash
+
+    Dynamic :-
+        * Least Connection
+        * Least Response Time
+
+
+
+Cap theorm
+
+
+Url shortner :-
+
+Hash func  -->
+
+    a.) Md5 (128 bit) --> 16 byte
+
+
+
+    _ _ _ _   8 4 2 1 => 16
+
+    1 byte => 8 bit => 2 hexa digits
+
+    so it will generate 16 * 2 ---> 32 hexa decimal means 32 character
+
+    b.) SHA-1 ( 160 bit ) so will generate 40 hexa character or 40 character
+    means 20 byte ---> 40 CHARACTER
+
+Base 62 -->
+    decimal10 --> Base62
+
+    Generate unique Id using zookeeper ranges to internally to different server
+    If length is different while converting from dec to base 62  if less then constraint add padding
+
+
+      System Consideration : Non-functional requirement
+
+       1.) Availability
+       2.) Read vs write
+       3.) Perfromace like p99
+       4.) Durability
+       5.) Security
+           Scalable and extensebility
+           Cost
+           Fault tol and relaibilty
+           Eventual consistency
+
+
+Design Rate limiter
+
+  algorithms
+     1.) Token --> implemented with counter need to maintain at minute level
+     2.) Leaky --> implemented using queue ( FIFO ) , cons many times consuming rate is slow so can be issue
+     3.) Fixed Window Counter --> But cons is at edge scenario more request is catered that can harm
+     4.) Sliding Window log ---> Solves above issues by maintaining count if exhaust all and cons timestamp logging ( only log )
+     5.) Sliding Window Counter -> Fixed Window Counter +  Sliding Window log
+
+
+Caching design:-
+
+     Available at
+       * Client side -> browser cache
+       * CDN
+       * Redis
+       * Loadbalancer
+
+    Strategy :-
+
+     * Cache Aside :- 1st cache and then DB. Here for updating cache back APP is responsible
+     * Read through cache :- Here cache is taking responsibility to maintain consistency. But cache and DB str same.
+                             both above had some problems
+     * Write around cache :- Directly write to DB and invalidate cache ( means marking dirty ). DB is single point failure.
+     * Write through cache :- First write data in cache and in a sync write in DB.
+                               We can use this in a combination with either 1st or 2nd way for better performance.
+     *  Write Back or Behind :- Write data in cache but for DB will be async. This will reduce write latency
+                                  We can use this in a combination with either 1st or 2nd way for better performance.
+
+
+      Cache Eviction policy :-
+
+
+Load Balancer :-
+     * L4 -> Network :- TCP / UDP PORT AND IP address src , dest. , faster
+     * L7 -> Application :- header, data, response and can route traffic, caching, advanced
+
+
+     Algorithms :-
+     Static :-
+            * Round robin
+            * Weighted round robin
+            * IP Hash
+
+      Dynamic :-
+            * Least connection
+            * Weighted least connection
+            * Least response time --> time to received first byte response time it uses [ Active connection + TTFB ]
+
+
+Transaction :-
+     SQL :-
+     * ACID
+     * TRANSACTION IS LOCAL TO DATABASE means multiple database rollback is not possible as different transaction
+
+       improvements :-
+         2 phase
+            * Prepare
+            * Commit
+            * Transaction coordinator
+
+         3 phase
+         saga pattern
+
+
+
+
+
+Vedio Streaming protocols :-
+
+* HTTP Live Streaming
+* MPEG DASH ( Built on HTTP )
+* HTTP Dynamic Streaming
+
+
+* RTMP :- first mile delivery or from source
+* HLS ( Built on HTTP ) --> provides Adaptive bit rate streaming
+* WEB RTC
+* XMPP ( Built on TCP ) :- Two way protocol like in whatsapp chat
+* web socket : ( Built on TCP ) mostly used in real time like vedio
+
+
+* scte protocl : used ads kind of markers
+
+* HTTP chunked transfer encoding : breaking down html
+* Progressive HTML rendering in browser
+
++---------------------------+----------------------------+-------------------------+---------------------+------------------------------+
+|       **Streaming Protocols**                           |
++---------------------------+----------------------------+-------------------------+---------------------+------------------------------+
+| Protocol                | Usage                        | Media Type              | Examples            | Implementation               | Pros                                     | Cons                                    |
++---------------------------+----------------------------+-------------------------+---------------------+------------------------------+------------------------------------------+------------------------------------------+
+| HTTP Live Streaming (HLS) | Adaptive bitrate streaming  | Both (Video & Music)    | Apple TV, Safari    | CDN (Akamai, Cloudflare),    | Adaptive bitrate, Broad support         | Latency issues                           |
+|                           |                            |                         |                     | Libraries: Video.js, hls.js  |                                          |                                          |
+| MPEG DASH                 | Adaptive bitrate streaming  | Both (Video & Music)    | YouTube, Netflix    | CDN (Akamai, Cloudflare),    | Adaptive bitrate, Standardized by MPEG  | Complexity in implementation             |
+|                           |                            |                         |                     | Libraries: dash.js, Shaka    |                                          |                                          |
+| HTTP Dynamic Streaming    | Streaming over HTTP         | Both (Video & Music)    | Adobe Flash Media   | CDN (Akamai)                 | Utilizes existing HTTP infrastructure   | Higher latency                           |
+|                           |                            |                         | Server              |                              |                                          |                                          |
+| RTMP                      | First-mile delivery         | Video                   | Twitch, Facebook    | Backend streaming servers    | Low latency                             | Limited modern device support            |
+|                           |                            |                         | Live                | (Wowza, Red5)                |                                          |                                          |
+| WEB RTC                   | Real-time communication     | Video                   | Google Meet,        | Peer-to-peer connections,    | Peer-to-peer, Low latency               | Complexity in setup                      |
+|                           |                            |                         | Discord             | STUN/TURN servers, Libraries:|                                          |                                          |
+|                           |                            |                         |                     | SimpleWebRTC, PeerJS         |                                          |                                          |
+| XMPP                      | Two-way communication       | Other (Text/Chat)       | WhatsApp, Google    | XMPP servers (ejabberd,      | Robust, Flexible                        | Resource-intensive                       |
+|                           |                            |                         | Talk                | Openfire), Libraries: Smack  |                                          |                                          |
+|                           |                            |                         |                     | (Java), Strophe.js (JS)      |                                          |                                          |
+| WebSocket                 | Real-time communication     | Both (Video & Other)    | Online gaming,      | WebSocket servers (Socket.io,| Low latency, Full-duplex                 | Complexity in implementation             |
+|                           |                            |                         | Stock trading       | SignalR)                     |                                          |                                          |
+|                           |                            |                         | platforms           |                              |                                          |                                          |
+| SCTE Protocol             | Ad markers in streaming     | Video                   | Cable TV            | SCTE-enabled encoders        | Standardized for ad insertion           | Complex implementation                   |
+|                           |                            |                         | broadcasting        | and servers                  |                                          |                                          |
+| SRT                       | Low-latency video streaming | Video                   | Haivision, OBS      | SRT-enabled servers          | Low latency, Secure and reliable        | Newer protocol, less widespread adoption |
+| RTSP                      | Controlling streaming media | Video                   | IP cameras, VLC     | RTSP servers (Wowza),        | Low latency                             | Limited support on modern browsers       |
+|                           | servers                     |                         | Media Player        | Libraries: Live555           |                                          | without plugins                          |
+| MSS                       | Adaptive bitrate streaming  | Both (Video & Music)    | Azure Media Services| CDN, Azure Media Services    | Integrated with Windows ecosystem,      | Limited cross-platform support compared  |
+|                           |                            |                         |                     | IIS Media Services           | Adaptive bitrate                        | to HLS and DASH                          |
++---------------------------+----------------------------+-------------------------+---------------------+------------------------------+------------------------------------------+------------------------------------------+
+
++---------------------------+----------------------------+-------------------------+---------------------+------------------------------+
+| **HTTP and Browser Technologies**                      |
++---------------------------+----------------------------+-------------------------+---------------------+------------------------------+
+| Technology               | Usage                        | Media Type              | Examples            | Implementation               | Pros                                     | Cons                                    |
++---------------------------+----------------------------+-------------------------+---------------------+------------------------------+------------------------------------------+------------------------------------------+
+| HTTP Chunked Transfer     | Breaking down HTTP responses| Both (Video & Music)    | Large file          | Web servers (Apache, Nginx)  | Efficient for large transfers           | Overhead for chunking                    |
+| Encoding                  | into chunks                 |                         | transfers, Streaming|                              |                                          |                                          |
+|                           |                            |                         | APIs                |                              |                                          |                                          |
+| Progressive HTML Rendering| Incremental HTML rendering  | Other (Web Content)     | Modern web          | Web servers, Frontend        | Faster perceived load times             | Requires careful design to avoid layout |
+|                           |                            |                         | applications (e.g., | frameworks (e.g., React,     |                                          | shifts                                    |
+|                           |                            |                         | Twitter, Facebook)  | Angular)                     |                                          |                                          |
++---------------------------+----------------------------+-------------------------+---------------------+------------------------------+------------------------------------------+------------------------------------------+
+
++---------------------------+----------------------------+-------------------------+---------------------+------------------------------+
+|       **Messaging Protocols**                          |
++---------------------------+----------------------------+-------------------------+---------------------+------------------------------+
+| Protocol                | Usage                        | Media Type              | Examples            | Implementation               | Pros                                     | Cons                                    |
++---------------------------+----------------------------+-------------------------+---------------------+------------------------------+------------------------------------------+------------------------------------------+
+| AMQP                     | Message-oriented middleware | Other (Messaging)       | RabbitMQ, Apache    | AMQP brokers (RabbitMQ,      | Reliable and secure message delivery    | Higher overhead, not suitable for high-  |
+|                           |                            |                         | Qpid                | Apache Qpid)                 |                                          | frequency, low-latency needs             |
+| MQTT                     | Lightweight messaging       | Other (IoT, Messaging)  | IoT devices,        | MQTT brokers (Mosquitto,     | Lightweight and efficient               | Limited to small message payloads        |
+|                           | protocol                   |                         | Facebook Messenger  | HiveMQ)                      |                                          |                                          |
++---------------------------+----------------------------+-------------------------+---------------------+------------------------------+------------------------------------------+------------------------------------------+
+
++---------------------------+----------------------------+-------------------------+---------------------+------------------------------+
+|     **Cloud Messaging Systems**                        |
++---------------------------+----------------------------+-------------------------+---------------------+------------------------------+
+| Protocol                | Usage                        | Media Type              | Examples            | Implementation               | Pros                                     | Cons                                    |
++---------------------------+----------------------------+-------------------------+---------------------+------------------------------+------------------------------------------+------------------------------------------+
+| Firebase Cloud Messaging  | Push notifications for      | Other (Notifications)   | Android apps,       | Firebase SDKs for Android,   | Easy integration with Firebase ecosystem| Limited to Firebase platform             |
+| (FCM)                     | mobile and web applications |                         | Web push notifications | iOS, Web                  |                                          |                                          |
+| Apple Push Notification   | Push notifications for iOS  | Other (Notifications)   | iOS apps, macOS     | Apple Developer APIs         | Direct integration with Apple devices   | Limited to Apple ecosystem               |
+| Service (APNs)            | and macOS applications      |                         | applications         |                              |                                          |                                          |
+| Amazon Simple Notification| Cloud-based messaging and   | Other (Notifications,   | Cross-platform       | AWS SDKs, APIs               | Highly scalable, Integrates with other  | Can become expensive at scale            |
+| Service (SNS)             | mobile notifications        | Messaging)              | notifications, IoT   |                              | AWS services                            |                                          |
+|                           |                            |                         | messaging            |                              |                                          |                                          |
+| Microsoft Azure           | Push notifications for      | Other (Notifications)   | Windows apps, Cross-| Azure SDKs, APIs             | Scalable, multi-platform support        | Complexity in setup                      |
+| Notification Hubs         | mobile and web applications |                         | platform notifications |                              |                                          |                                          |
++---------------------------+----------------------------+-------------------------+---------------------+------------------------------+------------------------------------------+------------------------------------------+
+
+
+Encryption :-
+    * Symmetric :- max key length 256 bits example :- AES, DES
+                   Cons    1.) is key distribution is a problem.
+                           2.) New client then new key management.
+
+   * Asymmetric :- max key length 2048 bits example :- RSA, DSA, Deffi helman
+                   Use-case can be Digital Signature , JWT is same
+
+Indexing -> DBMS create Data Pages { Header + Actual Data + Offset of rows }.
+            Disk store these data pages in form of Data block ( minimum amount of data to read / write ).
+            Averg data block size ranges is from ( 4Kb to 32 kb ) but avg is 8Kb.
+            1 data block can contain many data pages.
+            DBMS maintain the mapping Data Pages (key )  and Data Blocks ( value ).
+            DBMS control those pages like which row in which page, or sequences of pages
+            But no control on block as scatterd over disk.
+
+
+            B tree --> insertion / deletion / searching --> O(logn)
+            -> it maintain sorted data
+            -> all leaf are at same level
+            -> each node has atmost M childern
+            -> M-1 key as node for those children
+            -> DBMS is using B+ tree to manage Datapages and rows within the pages
+            -> only leaf node contains index values on which it is created example emp_id
+            -> Intermediatory values in B+ tree can deleted as well just used for fast traversing
+
+
+            Types :
+            Clustured Index :-
+                * One table has one Clust. index and order determines by pageOffset (part Data page )
+                * Example is primary key
+                * But if Pk is not defined by default DBMS will create idx column to maintain it
+                   in those case kind of auto-incr column index values.
+
+
+            Non-clustured Index :- Secondary , Composite keys
+            * There can be many secondary index and B+ tree needs to manage by database.
+            * But table pages ordering does'nt effect by secondary.
+            * On deletion of a row , lot of overhead
+
+        Examples : Clustered Index Example:
+
+                   Consider a Products table with columns ProductID (primary key) and ProductName. If you create a clustered index on ProductID, the rows in the table will be physically ordered by ProductID. For example:
+
+                   sql
+
+                   CREATE TABLE Products (
+                       ProductID INT PRIMARY KEY CLUSTERED,
+                       ProductName VARCHAR(100),
+                       Price DECIMAL(10, 2)
+                   );
+
+                   In this case, the ProductID column is the primary key and also the clustered index key. This means the rows in the Products table will be physically sorted by ProductID. Any queries that involve searching or sorting by ProductID will benefit from faster access due to the ordered structure of the data.
+
+                   Non-clustered Index Example:
+
+                   Continuing with the Products table example, let's say you want to frequently query products based on their Price. Creating a non-clustered index on the Price column would look like this:
+
+                   sql
+
+                   CREATE NONCLUSTERED INDEX IX_Products_Price ON Products (Price);
+
+                   This statement creates a non-clustered index named IX_Products_Price on the Price column of the Products table. Unlike a clustered index, a non-clustered index does not affect the physical order of the data rows in the table.
+                    Instead, it creates a separate structure (often a B-tree) that contains pointers to the rows in the table, ordered by the Price column.
+                   Queries that filter, sort, or group by Price will benefit from this non-clustered index,
+                   as it allows the database engine to quickly locate the relevant rows based on Price without needing to scan the entire table sequentially.
+                   These examples illustrate how clustered and non-clustered indexes are used to optimize query performance based on different access patterns in a database schema.
+
+
+Chat Application :-
+
+       * Long Polling ( Pushing ) / Polling :- Client retry
+       * Web sockets :- Bi-direction / persistant connection
+
+
+
+MircoServices Patterns :-
+
+     Domain Driven Concept :- By Functionality and By Sub domain
+     API Gateway pattern
+     Circuit Breaker pattern : Due to n/w failures
+     Bulkhead : resource limit to avoid system down
+     Saga pattern : Choreography , Orchestration
+     Strangler Pattern :- retiring old system using loadbalancer in traffic
+     Event sourcing pattern ( CQRS )
+     Service Discovery Pattern :
+     Anti corruption layer :-
+     Sidecar pattern
+     Database per service pattern
+
+
+
+
+Feature	Primary Key	Unique Key	Composite Key	Clustered Index	Non-Clustered Index
+Uniqueness	Yes	Yes	Yes	-	-
+Null Values	No	Allowed (one null in some DBMS)	No	-	-
+Number per Table	One	Multiple	-	One	Multiple
+Physical Order	Yes (InnoDB)	No	-	Yes (if primary key)	No
+Index Type	Clustered	Non-clustered	Can be primary or unique	Clustered	Non-clustered
+
+
+
+Whatsapp :
+
+Peer to peer not work as not scalable
+Client server model lets use ( request and response like http and then connection break also )
+
+Polling  : Checking each and every time
+Long Polling : After 1 min it will check and more time
+Web Socket : client initiate handshake --> server ack --> Bi-directional flow setup
+
+Session management can be done through redis but microservices with DB good approach
+Last seen should be update on user action based request only :- types : online, last seen , 30 second ago
+Group Service :- fetch which user part of which group
+Session Service :- which current user map to which socket connection Id
+
+Re-try scenario
+
+
+Schema
+User and Server mapping table
+User and msg table -->
+        (from and to ) --> partition key  and message Id --> Clustering key or timestamp can be a sort key
+Group and msg table -->
+        groupId + message Id --> partition key and message Id --> Clustering key
+
+
+
+Lets say 1M concurrent user and each connection takes 10K then
+1 M * 10 K -->10 GB
+
+HTTP/1.0 : One connection per request , Request/response per connection
+HTTP/1.1 : Persistent connections (keep-alive), Request/response per connection with pipelining, Chunked transfer - Yes and below also
+HTTP/2 : Multiplexed streams over a single connection , Multiplexed streams in a single connection, Header Compression ( Supported ), Mandatory (requires TLS in most cases)
+
+REST compared with SSE ( no support for binary data, event stream )
+
+
+
+Unique Id ways and strategy :-
+
+* IDs must be unique.
+* IDs should be sortable by time, meaning new rows have higher IDs than old ones.
+
+   * In Sql : auto_increment
+   * Local IDs work is that maintaining message sequence within one-on-one channel or a group channel is sufficient.
+   * Another way :  global 64-bit sequence number generator like Snowflake
+
+
+Sharding :-
+     On Secondary Index
+     Document ( Local S I ) :
+                                * Shards holding reference locally across the shards.
+                                * During reads other shards also means scatter and gather approach then return result to client. ( Not efficient )
+                                * During writes it will happens to 1 shards only.
+
+     Term ( Global S I ) :
+                                * Each Shards index holding reference of primary index row globally across the shards.
+                                * In reads only query to multiple shards as data is present globally and depends on shads.
+                                * Efficient reads.
+                                * During write some sec. index present on other shards this makes issue and need to update other shards. ( means cross shard movement )
+
+
+
+* NoSQL to SQL for read can be done with CDC events

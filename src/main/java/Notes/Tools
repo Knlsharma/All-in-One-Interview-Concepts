@@ -1,0 +1,158 @@
+Kafka :-
+
+* Async behaviour with retry mechanism
+* Pace matching
+* [ Key , Partition , value, topic name ]   payload
+    ^^^^^^^^^^^^^^^ are optional
+
+* Group of broker known as cluster.
+* Pub / sub : record is received consumed by all consumer
+* Record is not delete by broker.
+* Use case can be high performance monitoring and losing msg no option
+* High throughput, producer don't wait for ack by broker.
+* Pull Based System. consumer pull it
+* No fundamental filters, it must be done by consumers
+* Consumer to consume msg
+* No issue with adding new broker
+* Scalable and available due to replication of partition
+* Dumb Broker / Smart consumer
+* 1 MB size limit
+* kafka has own offset management table
+* Consumer commit offset to avoid duplicate reading of msgs
+* Zookeeper helps in
+    Leader election and broker registration / management
+    Topic and partition info
+    Consumer group management
+    Broker and health topic monitoring
+    Management of Kafka Server ( Broker )
+* producer send msg to leader partition of specific topic ---> leader appends to local log
+   and send to other for replication
+* ISR (in sync replica ) are up to date with leader like they can become leader
+* Consumer always read from leader partition and once read it ack and commits offsets
+* leader ensures followers are in sync
+* Scalability is by no. of partition
+* Replication is done at partition level always and leader are also a partition level if you have multiple broker
+* partition means actual disk space where you are writing
+* Partition has multiple offsets.
+* Each offset contain single event or a message.
+* Cluster is group of broker
+
+* Consumer for decision make uses
+     group coordinator ( from kafka side )
+     Consumer coordinator ( from consumer side )
+     which helps to decide which partition to read from.
+
+* Consumer can read data from multiple broker at the same time.
+* Consumer can reset offset option in case lagging to reset it.
+* Zookeeper notifies also consumer offset values.
+* Zookeeper has --> leader server --> writes , follower server --> reads
+
+
+Within a consumer group , two consumer cannot read from same partition simultaneously
+
+Some pros :-
+* Durability ( Message not delete if consumer is down )
+* Loose coupling ( Neither service knows about each other )
+
+
+Active / MQ  :- Point to point
+     * Push Based System. provider push the msg to consumer
+     * Broker deletes the msg once received by consumer
+     * Also call point to point messaging system
+     * Only one consumer can get the data only.
+     * Use in case for exactly once delivery and for valuing msg
+     * No message ordering
+     * Low throughput, so msg delivery state is maintained
+     * JMS API does this msg filtering
+     * Producer to ensure delivery of message
+     * Got degrade performance once number of broker got increase
+     * Smart broker / Dumb Consumer
+     * Msg processed will be processed by only one consumer either one of them.
+     * Leader handles of partition handles read and write
+
+   Semantics
+
+     At-least-once: Messages are guaranteed to be delivered, but duplicates may occur.
+                    Achieved by retries on failures.
+     At-most-once: Messages may be lost but are never duplicated.
+                    Achieved by not retrying on failures.
+     Exactly-once: Messages are delivered exactly once. (Sync )
+                    Achieved using idempotent producers and transactional writes.
+
+    Commit :-
+     * Auto Commit :- enable or not, auto commit after interval =
+     * Manual Commit :- to avoid dupicate processing of msg :- Sync, Async
+
+
+
+ Rabbit MQ :-
+
+     Exchange and Binding key
+     Multiple Q1, Q2, Q3T
+     then we had consumer
+
+     Types of Exchange :-
+     * Direct : Exactly match routing key and msg like in que1
+     * Topic pattern match : if match like topic* then put to specific queue
+     * Fan out : broadcast to all
+
+    If unable to process then requeue to back of queue as no offset is here in this.
+
+
+
+
+How it works in kafka :-
+
+ msg --> part Key --> Yes --> Hash( part Key) % No of partition -->
+                                                                        Identify Broker for Partition --> Send msg to broker --> Broker sends msg to correct
+                                                                                                                                    partition and appends to log file and offset increased
+                  --> No --> Round Robin or other logic -->
+
+Map --> partition to broker
+
+Kafka best practice :-
+* Aim for < 1MB payload size or per message
+* Use more brokers and good parition key
+* Hot partition handling :-
+     - Slow down producer
+     - Compound key :- AdId:1-100 or AdId:UserId --> But no ordering now
+     - Remove that key
+* Producer retries, batch message, ZIP
+* Sequential I/O ( It avoids Random Access in Disk ) --> append end only log
+* Zero Copy principal :- DAM ( Direct Access memory ) --> Not need to load in memory and hence CPU is not much affected.
+* Group Cordindator (list of active consumer ) and conusmer group ( One them is a leader and other follower )
+* when list is modified , Group Leader executes rebalanceing activity happens
+
+
+Flink :-
+ bounded stream --> DataSet API
+ un-bounded stream --> DataStream API
+ * Setup execution env.
+
+
+Window :
+
+  * Tumbling : Dividing time in to equal width window
+  * Session : It will overlap but depend how much time like window size and window slide both measured in time
+  * Sliding : It does not had fixed start time and controlled by Session Gap. Like Fitness
+
+Watermarking : in Flink are a mechanism for handling event-time progress and dealing with out-of-order events
+ * Bounded Out-of-Order Watermarks:
+            Ensure that events with timestamps less than a certain threshold
+             (e.g., current watermark minus a delay) have been processed.
+ * Punctuated Watermarks:
+            Issued based on specific events or conditions,
+            often used in scenarios where the event-time progression is irregular.
+
+Stateful Handling :
+  * Keyed : when you need to maintain state associated with specific keys in your data stream.
+  * Operator : when you need to maintain state at the operator level, independent of individual records.
+
+
+State Backends:
+  * MemoryStateBackend ( Storm in Heap )
+  * FsStateBackend ( HDFS or s3 )
+  * RocksDBStateBackend ( disk )
+
+  State TTL (Time-to-Live) in Flink is a feature that allows for automatic cleanup of state t
+  hat has not been accessed for a specified period.

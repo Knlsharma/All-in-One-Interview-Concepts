@@ -1,0 +1,20 @@
+
+gap strategy :-
+    Diagonal : i + j ( right top to down )
+    diagonal : i - j ( bottom down to up )
+
+
+Triangle property :- to form No need to check all properties
+       Like if a < b < c
+        then a + b > c
+
+
+
+Kisi bhe index i pe pachune ke lye i+1 number hona chaiyeh tha
+
+row = mid / m
+col = mid % n
+
+
+Cumulative sum of array
+

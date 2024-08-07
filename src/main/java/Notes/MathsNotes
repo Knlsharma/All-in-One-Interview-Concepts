@@ -1,0 +1,55 @@
+Property
+
+
+
+
+
+
+
+
+/*
+    Concept behind this method
+    K
+
+    a  b  c  d   e   f   g    h
+    -----s1-------
+    -----------------s2--------
+
+    Lets say,
+    s1%k = x
+    s2%k = x
+    s1 = k*n + x
+    s2 = k*m + x
+    subarraySum = s2-s1
+                = k*(m-n)
+                Which proves that the subarray is divisible by k
+*/
+1.) (a-b)%m = (a%m - b%m + m)%m
+
+
+
+
+2.)    a b c d e f g h
+  let say
+  num =  31  % 4  = 3
+
+  Now say lets add some multiple of 4 in num means
+
+  ( 31 + 4 * 2  ) = 39 % 4 = 3
+
+  hence
+
+   (31 + x ) % 4 = 3 means coming same
+
+   means x is multiple of 4 like 4 * 1, 4 * 2 ...4 * k
+
+   Example : Continuous Sum
+
+       23 2 4 6 7  ,        k = 6
+Sum    23         % 6 -> 5
+       23 + 2     % 6 -> 1
+       (23 + 4 + 2) % 6 -> 5  , here 4 + 2 is multiple of 6
+
+
+3.) Handing -ive remainder -->  rem = num % k;
+    if(rem < 0) then rem = rem + k

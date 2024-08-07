@@ -1,0 +1,27 @@
+
+ Java  imp method  throw NPE
+
+   * Queue : add , remove, element
+   * Priority Q : same above
+   * DE-Queue : addFirst, addLast, removeFirst, removeLast, getFirst, getLast
+   * Stack :
+
+
+
+ Java imp method not throw NPE
+
+  * Queue : offer , poll , peek
+  * Priority Q : same above
+  * DE-Queue : offerFirst, offerLast, pollFirst, pollLast, peekFirst, peekLast
+  * Stack :
+
+
+
+
+22.) Substring :- nC2   , subsequence :- 2^n
+
+23.) Graph :-
+  smallest distance : bfs
+  smallest distance with weight is : djikstra
+  MST : Minumum wire required :- Prism , Kruskal
+  Toplogical sort

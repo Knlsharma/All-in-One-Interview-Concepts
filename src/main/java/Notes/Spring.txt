@@ -1,0 +1,287 @@
+Bean is java object which is managed by spring container ( known as IOC -> create + manages )
+we can create either with @Com or @Bean
+  --> By default spring invokes default constructor if not supplied for a java object
+  --> if we are defining a way then via parameter constructor so not default is there now for a class
+        then we are giving a way to tell spring  using @bean
+  ---> 1st priority is for external config that we supply in config
+Spring find beans using @CompScan , @Config to create it
+Eager :-
+Lazy :- @Lazy or used with prototype, one point until it's dependency is not needed it does not created
+
+In spring Dependency Inversion is achieve using Dependency Injection (No tight coupling ) Inversion ---
+    Field Injection chances of NPE or immutability,
+    cons
+      * If Spring doesn't manage to inject the dependency, the field will be null, potentially leading to NPEs if used before proper initialization.
+      * Immutability Issues: You cannot create immutable classes with field injection because Spring injects dependencies after object creation.
+      * Mocking dependencies during unit tests becomes more complex as you need reflection to set private fields.
+      * Tight coupling with Spring framework, limiting usage outside of Spring context.
+
+    Setter on setter we put @Autowired,
+      * In rare cases, if dependencies are set in the wrong order via setters, it might lead to unexpected behavior, add boiler plate code.
+      * It can introduce complexities related to dependency order and potential null references if not managed carefully.
+        In cases where the order of setting dependencies matters, it's crucial to handle initialization
+        checks or refactor to use constructor injection, which ensures all dependencies are provided
+        during object creation, thereby avoiding such issues altogether.
+
+
+
+    Constructor Injection dependency resolve at starting
+    cons
+     * Can lead to complex constructors with many parameters for several dependencies.
+
+Using @Lazy, @PostConst, Refactor common code segregation at field level means above autowire on one of them helps to resolve the issue
+For unsatisfied dependency use @Primary , @Qualifier
+
+> immutability :-
+                  * Make Fields final: Once initialized, final fields cannot be reassigned.
+                  * No Mutators: Do not provide setter methods that modify fields.
+                  * Initialization via Constructor: Set all fields in the constructor and do not provide methods to change them afterward.
+                  * Deep Copying for Mutable Fields: If a class holds references to mutable objects (like collections),
+                      ensure that they are deep-copied or made immutable.
+
+Life cycle of a bean :-
+    IOC started --> create beans --> inject dependency to resolve --> Post Construct (pre initialize logic )--> use the bean --> PreDestroyed (before destroying ) --> Destroyed
+
+Spring solves
+  * Removal of web.xml using annotations powers
+  * IOC is managing object dependencies and lifecycle ( through DI )
+  * First controller is Dispatcher servlet in earlier times helps to choose controller
+    dispatcher servlet --> handler mapping --> IOC initialise bean and dependency resolved --> API called
+  * Version management --> In boot parent handles the same and add all version for same
+  * Auto Config
+  * Embedded server :- serv
+  * Internally spring uses reflection.
+  * Provide health and metric
+  * Avoid additional config. --> Now no need to define other things like in DB no need to define session, tran manager
+
+
+
+* Some Annotations :-
+
+    @Autowire :- by default required attribute is true
+    @Comp :- Is the main rest 3 are derived from this like @Contr, @Serv, @Repo
+    @Cont :- used at class level
+    @RestCont :- @Cont + Response Body ...so now no need to mention @ResponseBody
+    @Reqmapp :- value and httpmethod can be use class , method level this can be replaced with @Post, @Get etc
+    @Reqparam :-
+    @InitBinder :- we need to make a class by extends from IPropertyEditorSupport
+    @PathVar :- pass the input as per of url
+    @RequestBody --> API Body to DTO ( desarilize )
+    @ConditionalOnProperty :- means bean can be created or not, and in usage required for autowired should be false.
+    @profile :- Related to env. helps you create bean by properties defining key and value in .prop example : spring.profile.active = app1
+    @Resource --> DI + ambiguity
+    @Config :- @import is one of the alternative to this in case specific needed only.
+    @Primary :- give priority to specific bean. example multi datasource
+    @ConifgProperties :- Used to load property and to DTO with a prefix. used with @Config to map with an object
+    @RestContro :-
+    @ControllerAdvice or @RestControllerAdvice :- search for mapped exception class. It's global way to handle
+    @Transactional :-
+    @valid :- To know spring looks for respective validation added for DTO
+    @CrossOrigin :- to allow server and web hits each other
+
+
+    Spring.factories available from spring v4 if all condition satisfied then it will be available based on dependency add in pom based on auto-config
+
+    @ConditionalOnBean       // check if bean is in spring factory or not
+    @ConditionalOnClass      // check if a class on the classpath example ObjectMapper.class
+    @ConditionalOnMissingBean // if above particular attribute type is missing ...I will enable this example : DatabaseAutoConfig
+    @EnableConfigProperties  // If specific properties mentioned in properties file of that dependency  then I will enable it.
+
+    If single condition satisfied as just above it will count under positive match but necessary key need to add manually to bring app up and for autoconfigure.
+
+    many other
+
+    In boot
+    @SpringBootApplication => @Config + @EnableAutoConfig + @ComponentSc  ( these 3 are traditional )
+                             ( Load java bean )   (Configure for us based on pom like h2 )   ( Scan for path to load base path/ packages for only main class )
+
+* We can exclude if don't want to register in IOC using attribute
+* If we want scan specific / root package using attribute
+
+Once Main methods called
+ * application kick off --> initialize Application context
+ * Check app type :- Standalone, servlet, reactive, webapp etc.
+ * @Config, @comp, @service, @repo class searches and mapped beans are saved inside JVM area called IOC or context
+ * Registering dispatcher servlet like handler mappings and message converters and basic things
+ * Create EmbeddedTomcatServletContainer and add the context
+
+
+Spring Reactive :-
+     Let's see an example sequence with a Publisher, Subscriber, and Processor:
+
+    A Subscriber subscribes to a Publisher.
+    The Publisher sends a Subscription to the Subscriber.
+    The Subscriber requests 5 items using request(5).
+    The Publisher sends 5 items to the Subscriber using onNext.
+    The Subscriber processes each item and may request more items if needed.
+    If a Processor is in between, the Processor receives the items from the Publisher, processes them, and publishes the results to its Subscriber.
+
+     then either it will be onComplete / onError
+
+    4 interfaces :-
+
+    interface Publisher or Producer
+    {
+    void subscriber(Subscriber s)  1)
+    }
+
+    interface Subscriber or Consumer
+    {
+    void onSubscribe(Subscription s)  2.)
+    void onNext(T t)  4.)
+    void onError(Throwable t)
+    void onComplete()  5.)
+    }
+
+    interface Subscription
+    {
+    void request(long n)  3.)
+    void cancel()
+    }
+
+    interface Processor< T, R > extends Subscriber<T>, Publisher<R>
+    {
+
+    }
+
+
+    * Ways to implement reactive :- Project Reactor, RxJava, JDK9 reactive flow, vertx
+    * Mono, Flux  --> will act as publisher in reactor package wise
+        Mono<String> mono = Mono.just("hi").log()
+        mono.subscribe(sout)
+
+    * Mono --> 0..1 element
+    * Flux --> 0...N Element
+
+    Future is blocking so completable  future is not :-
+     This synchronous waiting is necessary because Future does not provide methods for asynchronous composition or chaining of operations.
+
+
+
+AOP :-
+   * to start add aop dependency
+   * @Aspect is a class level
+
+
+-------------
+1.) Autowired --> DI , Qualifier --> ambiguity , Resource --> DI + ambiguity
+
+
+    @PropertySource ---> load property file and then use the key and place it as key
+    @Resource --> we can load above key using this annotation at runtime like paytm and phone , its byName
+                  *  resolves dependencies by name first, with fallback to type if the name does not match. ( Supports both , first name + type )
+    @Qualifier --> its by Name
+    @Autowired  --> its by Type
+
+2.) Req para ---> it will not force you.
+    path variable --> if not passed then it will give 404
+
+3.) Isolation vs Propagation
+
+4.) mvn spring-boot:run --> executes the class from target class directly. Picks main to start from there itself.
+   if we want jar manually then mvn build it :- its a separate creation process from just above
+
+5.) CommandLineRunner in spring it's functional interface.
+    @run method --> This will run after Spring:run will run.
+
+6.) CONSTRUCTOR  : it's a mandatory dependency injection, immutable in nature, circular dependency not resolved
+    VS SETTER : Optional, not immutable in nature, circular dependency can be resolved via lazy
+
+7.) Run method executing order --> spring run > post construct > command line runner run
+
+8.) application.properties >> application.yaml --> Although both loads at app start time but precedence order
+
+9.) Singleton  : Database Config, Service Layer (Not maintaining any mutable state ), APP config
+    vs Prototype : User Session, Thread Safety, Heavy Initialization
+
+    Below using proxy mode
+    Request,
+    Session,
+    WebApplication
+
+10.) Can we inject Prototype bean in Singleton beam ? if yes how ? How to prevent this ?
+    Yes then Prototype bean will loose it's own scope and become singleton.
+    TO prevent this get Prototype bean from context when it's needed. Or ObjectFactory or @Lookup in singleton bean only
+
+11.) Spring Singleton : to get single instance per Application Context.
+     Plain Singleton : to get single instance per JVM.
+
+ 12.) If I had 2 different Context then try get same bean it will give 2 different instance because scope within App Context.
+      But in Java Singleton you will 2 different instance if it run in two different JVM.
+
+ 13.)  BeanPostProcessor interface in Spring :-
+        Allow to perform before and after the bean Initialization. Example password validation at application startup
+
+ 14.) Isolation vs Propagation :-
+
+    precedence given to method > class level in case both applies.
+
+     1. Isolation Levels
+     Isolation levels determine how transaction integrity is visible to other transactions and vice versa. Different levels are:
+
+     READ_UNCOMMITTED: Lowest isolation, allowing uncommitted changes to be visible to other transactions.
+                     * No locking mechanisms are used.
+                       Transactions can see "dirty reads," meaning they might read data that is currently
+                       being modified by another uncommitted transaction.
+     READ_COMMITTED: Only committed changes are visible. Prevents dirty reads.
+                     * Shared locks are acquired on rows being read.
+                       These locks are released at the end of the statement, not the transaction.
+                       This allows other transactions to read the committed data but prevents "dirty reads."
+     REPEATABLE_READ: Ensures that if a row is read twice in the same transaction, the data will not change.
+                     * Shared locks are acquired on rows being read and held until the transaction commits.
+     SERIALIZABLE: Highest isolation, ensures complete isolation from other transactions but can lead to decreased performance.
+                   * Exclusive locks are acquired on rows involved in any read or write operation.
+                     These locks are held until the transaction commits.
+                     This provides the highest level of isolation but can lead to decreased performance due to frequent locking and potential deadlocks.
+
+     2. Propagation
+     Propagation defines how transactions relate to each other. Key types are:
+
+     REQUIRED: Uses the current transaction or creates a new one if none exists. This is default
+     REQUIRES_NEW: Suspends the current transaction and creates a new one.
+     NESTED: Executes within a nested transaction if a current transaction exists.  Act like REQUIRED. Works like a Savepoint and commits successful part only.
+     MANDATORY: Supports the current transaction; throws an exception if not called from transaction exists / context. itself it does not create for himself because dependent on parent tranasction.
+     SUPPORTS: Executes within a current transaction if one exists; otherwise, it executes non-transactionally.
+     NOT_SUPPORTED: Executes itself non-transactionally, suspending any existing transaction.
+     NEVER: Executes non-transactionally; throws an exception if a transaction exists. Opposite to MANDATORY. If any transaction context reaches to me I'all not bear.
+
+15.) 204 -> no content, 201 -> create, 206 --> partial content, 200 ---> ok
+
+16.) @Aspect
+ Joinpoint , pointcut,
+   // after advice --> consider exception
+   // after returning advice --> No exception
+   // after throwing advice --->  if any exception occur
+   // around advice ---> before + after returning
+
+17.) Scopes :-
+   Singleton : Object initialized before hand during app startup time
+   Prototype : its lazily initialized means when object is created when needed,
+               and when hit new object is constructed
+
+   Below use proxy mode during application start in case needed :-  like placeholder
+       Request : New object created for each http request (means during same http request ),  its also lazily initialized.
+                 But no duplicate object created during the same http request call.
+       Session : Lazily + created for each HTTP session + after ending session it will create new beans
+       Application :
+
+18.) N+1 --> N is the number of child objects fetched.
+             findALL By department --> 1 query and it consist 3 entry of child foreign key --> 1 + 3 --> 4 calls
+             solution :-
+              * HQL / Spring data JPA helps to get all data using fetch, a single query with left join on foreign key
+              * @EntityGraph : allows partial and specific fetching of objects.
+              * Criteria :- We can customize as per query Eager or lazy
+
+19.) Database
+     Inside :- Constraints, Indexes, Columns, Defaults
+     Outside :- Views and stored procedure
+
+20.) Hibernate implements JPA (interface ) means what to do
+     How to do is defined in form of annotations by Hibernate
+     *Important interfaces :-  1 session factory per db connection --> you will get session --> then transaction
+     * @EmbeddedId for composite primary key
+     * Hibernate Cache :-
+          First level :- by default enabled associated with session object, once clear session all clear and each session has it's cache object
+                          Also known as Persistence Context
+          Second level : - by default disabled, like EHCache, Caffeine
+          Query level cache :- It works only with Second level cache

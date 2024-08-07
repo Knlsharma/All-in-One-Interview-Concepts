@@ -1,0 +1,51 @@
+1.) Adjacency List : map<Vertices , List<Vertices>>
+     O( V + E ) -->
+     * No extra space left
+
+
+2.) Adjacency matrix
+     O( V^2 )
+     * More spaces
+
+
+Topic :-
+ * Cycle in graph : UnDirected ( Currently done via this )
+ * Bipartite graph :-
+       means 2 different colour se colour such that adjacent is not same
+       If odd length cycle :- not a bipartite
+       If even length cycle :- is bipartite
+
+       color can be 1 -> Red, 0 -> Green
+       done with BFS and DFS
+
+ * Shortest Path is
+     * BFS
+     Below technique pending
+     * Dijkstra :- Single Source shortest path like from A -> B, C, D, E, B -> A, C, D, E
+     * Bellman ford :-
+     * Flord Warshall :- In 1 pass O( n^3 )
+
+ * Topological Sorting on directed graph always
+      u --> v ( means u will come first then v )
+      So not possible in cycle graph
+      IN DAG
+            > Directed Acyclic Graph
+ * Kahn's Algorithm (its also Topological Sorting but via BFS )
+      example (1,0) -> phele 0 krege then 1 hoga
+      -> add 0 in in degree first in queue
+      --> remove and update in degree of child one by one
+              if in degree is 0 then we can put in Q only.
+
+* Directed Acyclic Using BFS -->
+     if no topo order found then no issue
+     else cycle is there yes
+
+
+* DSU :- Set ( b ) interset set ( g ) == nothing
+      * Operation  to combine two given set. and find parent
+      * Tell if two members (b , g ) belongs to same set or not
+      * Union
+      * Find
+
+
+

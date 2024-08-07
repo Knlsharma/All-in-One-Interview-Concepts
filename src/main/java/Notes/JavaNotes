@@ -1,0 +1,675 @@
+Java :-
+        * Java program AND bytecode is Platform Independent but JVM is platform dependent,
+        * Portability ( write once , run anywhere )
+        * JDK, JRE, JVM is platform dependent
+
+JAVA PROGRAM --> COMPILER ->
+        -> [ JIT DOES BYTECODE convert by to machine code ] JVM (software or abstract machine ) -->
+        -> JRE ( ALREADY  JVM + CLASS LIBRARY ) -->
+        -> JDK : JRE + ( COMPILER , DEBUGGER, Prog. Lang)
+
+ Interpreter -> line by line read from language level to machine level code
+
+OOPs :- PIEA
+
+Abstraction :- Hide details
+Encapsulation :- is like capsule  saving your data
+
+Inheritance :-
+Dog is a Animal
+Car is a Vehicle
+
+Single level A -> B
+
+Multi Level A -> B -> C
+
+Hierarchical  -
+            Class A
+
+        Class B        Class C
+
+        Example :- Class B extends Class A
+        {
+
+        }
+
+
+
+Multiple [ Diamond Problem not allowed in JAVA ] :-
+
+
+         Class B       Class A
+
+                Class C
+
+
+         Class C extends Class B, Class A  (Both had common method so unable to resolve )
+         Class C implements interface B, interface A ( It is allowed )
+
+Polymorphism :-
+
+ like water can be solid , liquid , gas
+ like person can be father, husband , employee
+
+
+ Method Overloading :- Not depends on return type same method name and different number of parameters ( can of different types or number of argument ).
+                        [ return type does not had any effect ]
+ Method Overriding ( with inheritance ) :- Everything should be same but implementation can be different and calling is defined at run time.
+
+
+Has A relation:- ( Association ) :- one to one , one to many, many to many
+      Types
+      -> Aggregation :- Weak , Both can survive individually like School and Student
+      -> Composition :- Strong , ending of once will end other like School and Room
+
+
+Q1. Why constructors do not have any return type?
+Ans:  Constructors do not have any return type to differentiate between the constructor and the method.
+
+Q2. Why constructor cannot be final?
+Ans:  Constructors can not be inherited. Since it can not be inherited, then what's the use of using Final keyword.
+
+Q3.  Why constructor cannot be abstract?
+Ans:  Constructors can not be inherited. Since it can not be inherited in the child class, then it cannot be static.
+
+Q4.  Why constructor cannot be static?
+Ans:  Constructor initializes the state of an object and needs to access instance variables, so it can't be static, as static methods don't have access to instance-specific information.
+
+Q5.  Can we define constructor in interface?
+Ans:   An interface, doesn't have instances with state that needs initialization, and it doesn't make sense for an interface to have a constructor.
+
+Q6.  Why constructor name is same as of class name?
+Ans:  To identify the constructor among all the methods and constructor defined under the class.
+
+-----------
+
+
+Pojo Class Definition like DTO
+
+ 1.) Not extend or implementation
+ 2.) Getter and setter
+ 3.) Default constructor
+ 4.) Class should be public
+
+Usages :- for storing and transferring
+
+ENUM : Collection of constants
+1.) Internally it extends Java.lang.Enum class
+2.) So it Cannot be extend but can implement interface
+3.) Since Java enums are final by design, they cannot be subclassed
+4.) Enum have singleton nature by default
+
+
+Singleton : Check in design pattern
+
+Immutable Class :
+               * All fields of an immutable class are private, final.
+               * The class itself is declared as final to prevent subclassing.
+               * Say no to setter methods.
+               * Initialize all variables in constructor.
+               * Perform clone of Mutable Objects while returning from Getter.
+               * In case of List we can return new copy of list from getter.
+               * In case of mutable Object Association do same like just above from avoid change by someone.
+
+Wrapper Class : a way to use primitive data types (int, boolean, etc.) as objects.
+                Each primitive data type has a corresponding wrapper class in the java.lang package.
+               > Type : Boxing , UnBoxing
+
+Abstract Class: A class that cannot be instantiated on its own and is meant to be subclassed.
+                It may contain abstract methods that must be implemented by subclasses.
+
+Utility Class : Contains static methods and is not meant to be instantiated having final.
+                Often used for helper methods.
+
+Final Class : A class that cannot be subclassed.
+              This is useful when you want to prevent inheritance and ensure the class behavior remains unchanged.
+
+
+
+-------------
+
+1. Final
+    variable =  values can't be reassigned, They must be assigned either at the point of declaration
+    data member = values can't be reassigned (either assign in parsing or constructor / static block)
+    fn = Can't override the fn in derived class (overloading is allowed in same class and derived class)
+    class = can't derive the final class
+2. Abstract
+    class = can't make an object of abstract class (for instance Employee class derived into HREmployee or Software Employee.
+     Employee class should be abstract, because not a type in itself, just created to absorb common functions of HREmployee and SoftwareEmployee
+    fn = fn which doesn't have code (only API)
+    implications
+        Why required? -> To absorb common code of deriving Classes
+        If fn is abstract, will the containing class be necessarily abstract? Yes
+        If class is abstract, will it necessarily have abstract functions? No
+3. interface
+    -> When all fns are abstract and there are no common instance data members to share
+    -> Similar to abstract classes
+    -> An extreme version of abstract classes
+        -> when all fns are abstract
+        -> no common instance data members
+    -> If a class implements an interface but doesn't provide body for all functions, then it will become abstract
+    -> Can we make an object of interface? No
+    -> Can an interface provide body for any function? Yes, since Java8, using the default keyword it is possible (although advised to not use). Java provided for this backword compatibility. Not to be used often.
+    -> Can an interface have data members? Yes, but not as instance data members, can be used as static data members
+4. abstract class vs interface (4:32 to 4:42 for notes)
+    -> Abstract classes can have implementations for some functions, interfaces are supposed to have all functions with no implementations
+    -> Abstract classes can have instance data members, interfaces can only have static data members
+    -> A class can't derive two abstract classes, but can implement any number of interfaces
+    -> Interface data members are public ,static and final
+5. comparable vs comparator : Comparable ( compareTo )  Used for natural ordering , Comparator (compare) Used for custom ordering
+6. iterable vs iterator
+7. Object -> toString : string representation of the object. , equals : Compares objects for equality. , hashcode : Returns a hash code value for the object
+8. Integer vs int, Integer[] vs int[]
+9. Lambda functions
+    List<String> names = Arrays.asList("John", "Jane", "Jack");
+    names.forEach(name -> System.out.println(name));
+
+Questions
+    Q1. What is final variable?
+    Q2. What is final data member?
+    Q3. When are they initialized?
+    Q4. What is final fn? -> Can't override them in derived class
+    Q5. What is a final class? -> Can't derive the final class
+    Q6. What is abstract class? -> Can't make object
+    Q7. What is abstract fn? -> A fn with no body.
+    Q8. Can an abstract class have 0 abstract fns? -> Yes
+    Q9. Can a class having abstract fns be marked as non-abstract? -> False. Have to mark the class abstract or provide implementations for all abstract fns
+    Q10. Ctor in abstract class? -> allowed
+    Q11. Why abstract fn? -> TO enforce the deriving classes to provide implementations
+    Q12. Why abstract class? -> To represent the common concept and absorb common functionality or data members?
+
+
+
+ ----------------------------------------------------------------
+
+
+ 1. comparable vs comparator
+ 2. iterable vs iterator
+ 3. Object -> toString, equals, hashcode
+ 4. Integer vs int, Integer[] vs int[]
+ 5. Lambda functions
+
+ notes
+ -> List of Integer, String, Boolean, double, float, char can be sorted because these can be compared to each other
+ -> PriorityQueue of Integer, String, Boolean, double, float, char will work because these can be compared to each other
+ -> Sort (Collections.sort / Arrays.sort or PriorityQueue or TreeSet or TreeMap) won't work for normal classes
+ -> Error = can't typecast <current class> to comparable
+ -> What is comparable?
+ -> comparable is an interface?
+     -> What is an interface?
+     -> Interface is a contract of fns, which any class that implements the interface has to honor (the contract)
+     -> Class implementing the interface has to provide body of fns
+ -> What does comparable interface contain?
+     -> only one fn -> int compareTo(T o)
+ -> How is comparable interface special
+     -> it is java's designated interface meant to implement comparisons
+     -> Used by any java code which uses comparisons
+         -> PriorityQueue, TreeMap, TreeSet, Arrays.sort, Collections.sort, Collections.min, Collections.max
+ -> How to implement comparable?
+     -> With in sample class itself new to implement. example Employee
+     -> write the body of int compareTo(T other) fn
+         -> if you think, this < other, return -ve values
+         -> if you think, this == other, return 0
+         -> if you think, this > other, return +ve
+ -> Increasing = this.p - other.p
+ -> Decreasing = other.p - this.p
+ -> Multiple parameters e.g. sort l1 of cars on speed and l2 of cars on price
+ -> Example :
+    Collections.sort(carList); // comparable
+    Collections.sort(carList, (car1, car2) -> Double.compare(car2.getPrice(), car1.getPrice())); // comparator
+
+ -> Normal classes (custom classes that do not implement Comparable) cannot be sorted using methods
+    like Collections.sort, Arrays.sort, PriorityQueue, etc.,
+    unless they explicitly implement the Comparable interface.
+
+ -> It provides a single natural ordering which is fixed.
+ -> Comparable is implemented by the class itself to provide a natural ordering of its objects.
+
+         @Override
+           public int compareTo(Employee other) {
+               // Compare employees based on age
+               return this.age - other.age;
+           }
+
+
+ -> Comparator :-
+
+    *  Comparator is a functional interface in Java used to define custom ordering of objects.
+    *  It allows sorting objects based on multiple criteria or alternate sorting orders.
+    *  Comparator provides flexibility to define multiple different sort orders or criteria
+    *  Comparator is implemented as a separate class or as a lambda expression to define custom ordering of objects.
+
+            @Override
+             public int compare(Employee emp1, Employee emp2) {
+                 // Compare employees based on name (ascending order)
+                 return emp1.getName().compareTo(emp2.getName());
+             }
+
+When to Use:
+
+    * Use Comparable when objects have a natural ordering that is inherent to the class itself.
+
+    * Use Comparator when you need to define custom sorting logic, multiple sorting orders, or
+        when sorting objects that do not have a natural ordering.
+
+Final Takeaway :-
+    When to Use Comparable:
+
+        Use
+
+        Comparable when a class has a single, inherent ordering that makes sense for most use cases.
+        This ordering becomes the "natural" ordering for the class, used by Collections.sort without additional arguments.
+        Common examples of natural ordering include:
+            Numbers (integers, doubles, etc.) - sorted by their numerical value.
+            Strings - sorted alphabetically by their character sequence.
+            Dates - sorted chronologically.
+
+    When to Use Comparator:
+
+        Use Comparator when you need custom sorting logic beyond the class's natural ordering,
+            or when objects don't have a natural ordering at all.
+        Scenarios where Comparator is useful:
+            Sorting a list of Car objects by model name instead of price.
+            Sorting a list of Employee objects by salary in descending order.
+            Sorting a list of custom objects that don't have a clear inherent ordering (e.g., Product objects with various attributes).
+
+
+
+---------------
+
+ Java  imp method  throw NPE
+
+   * Queue : add , remove, element
+   * Priority Q : same above
+   * DE-Queue : addFirst, addLast, removeFirst, removeLast, getFirst, getLast
+   * Stack : push , pop , peek
+
+
+
+ Java imp method not throw NPE
+
+  * Queue : offer , poll , peek
+  * Priority Q : same above
+  * DE-Queue : offerFirst, offerLast, pollFirst, pollLast, peekFirst, peekLast
+  * Stack : push, pop, peek
+
+
+
+* Map
+-> is not part of collection framework as key and value
+-> Uses entry interface , has array of node which has hash, key, value and next
+   Hashcode and equal
+-> If obj1 equals obj2 then their hashcode should be also same example get and put lands on same bucket for a particular always
+-> If two objects has hash same does not means 2 objects are equal example that why we match hash and values while returning
+-> map intial size is 16 and performance factor is 0.75
+   when its's threshold reaches once 13th item is put the rehashes happens
+-> On 8th it will convert linked list into balanced binary tree
+-> Hashtable is thread safe , hashmap does not maintain order
+-> Hashtable does not contain null key or value
+-> LinkedHashmap maintains insertion + access ordering internally used Double Linked List example LRU cache if ordering needed used while constructing
+
+
+* Tree map
+-> internally use Red black tree ( self balanced binary search tree )
+-> natural ordering is ascending
+-> Node has Left , Parent, Key , value, Right
+
+* Set
+-> Internally used map like key, newObject()
+
+* Java Streams : bool  test("Hello"), Function --> R apply(T  t), Consumer --> void accept(T t), Supplier --->  T get()
+  * Flat map can do like simple map and without map
+       .map( word -> word.toUpperCase()
+       .flatmap(sentence -> sentence.stream())
+  * Pipeline
+  * Filter, map --> Intermediate stream is like new stream , old is not changed , peek( Consumer ) , skip(), limit(), mapToInt(val -> Integer.parseInt), mapToDouble( ) , mapToLong( )
+  * Intermediate stream is Lazy in nature execute at terminal operations , you will get result and closed the stream
+  * anymatch, allmatch, nonematch , findfirst, count, distinct(),  sorted(), collect(Collectors.toList()), toArray() , forEach(), reduce(R BiFunction(T t, Q q), min (Comparator) , max (Comparator)
+  * If stream is used means terminal is applied and trying to re-use the reference you will get exception : stream already executed and closed.
+  * parallel stream use multi core CPU.
+  * It uses like task divided fork() and then Join()
+
+
+---------------
+
+ Initial notes of threads
+     * By default main thread will finish its work and die and program execution will depend on other user threads
+     * if we want main to stay alive we ask all specific thread join method to check. example : t1.join()
+     * Daemon is like background task and Daemon thread get destroyed once till any thread is alive.
+     * Example of Daemon :- Garbage Collector, Auto Save
+
+  Runnable interface ----> thread class
+
+  During a thread run it also put monitor lock
+  Monitor locks works on Object Reference Level. example shared resource
+
+  New --> Runnable --> Running
+
+   * Blocked :- Scenario Getting file from DB
+       Release ALL monitor
+
+   * Waiting :- like wait() and notify() / notifyAll()
+       Release ALL monitor
+
+   * Timed Waiting :- like sleep() and join()
+       Do not release any Monitor Locks
+
+    wait() and notify are for inter thread communication and Synchronize on method should be used need to use
+
+    wait() : The wait() method releases the lock.,The wait() method is defined in Object class.
+    sleep() : The sleep() method is defined in Thread class.,doesn't release the lock.
+
+
+
+  25.) Lock based mechanism
+      - If not same objects ref but only one thread should pass from a method /  critical section :-
+      - These not depend on objects reference as we are passing same lock as reference.
+      - No need to use synchronize at method level now
+
+   * Synchronize : Pessimistic
+                     by the synchronized method
+                     by synchronized block
+                     by static synchronization : This applies for static methods / class this applies lock on static class / methods not object
+   * Reentrant Lock : Will allow only one to pass from CS + Pessimistic
+   * Readwrite Lock : Read and write like share and exclusive lock. Usecase can be read is very high w.r.t write + Pessimistic example : BooK my show seat booking
+   * Stamped Lock : Optimistic + Read and write lock  ( No lock acquired )
+   * Semaphore Lock : More then one thread can acquire. example : connection pool , printer
+
+   Inter thread communication done via Await() and Signal() / SignalAll() :-
+    Advantages :- avoid thread polling in Java, between synchronized threads
+
+   Some Notes : synchronized: Uses an intrinsic lock associated with the object instance or class.
+                                Locking and unlocking are implicitly handled by the JVM.
+                ReentrantLock: Uses an explicit lock object (ReentrantLock instance), providing more flexibility in locking and unlocking.
+                                It allows for more advanced locking mechanisms such as timed waits, interruptible locks, and polling.
+
+
+   26.) Two ways to achieve concurrency :-
+
+    a) 25 ( Lock based mechanism )
+
+    b) LOCK FREE  :- Compare and Swap is more at CPU Level :- Atomic -> Integer, Boolean, Long, Reference
+                     usecase :- when we need a READ, MODIFY, UPDATE
+                     Also faster then lock based
+                     Atomic It also uses volatile internally ( by passes CPU level caches directly update shared memory )
+        volatile : make sure read and write happens via directly from memory. No relation with thread safe.
+                    Typically faster than synchronized blocks due to minimal overhead but slower than atomic operations.
+
+        atomic : thread safe, Generally faster than synchronized blocks and provides better performance than volatile for operations requiring atomicity.
+
+    Some Concurrent Collections we had in java
+      Reentrant Lock :- PriorityBlockingQ, CopyOnWriteArrayL
+      Compare and swap :- ConcurrentLinkedDQ
+      Synchronized :- newKeySet in ConcurrentHashMap , Collections.syncronizedSet or Collections.syncrnoizedSortedSet
+
+
+---------------
+
+Concurrency is about managing multiple tasks simultaneously, typically on a single core, through time slicing.
+   A web server handling multiple requests concurrently, where each request is processed independently but possibly overlapping in execution time.
+   It's about dealing with lot of things at once.
+   -> Only 1 cpu core
+   -> Interleaving of threads
+   -> Thread scheduling and which instruction is executed is not in our hands.
+
+Parallelism is about executing multiple tasks simultaneously on multiple cores,
+               leading to true simultaneous execution. Running computations on different cores of a multi-core CPU simultaneously.
+               Doing a lot of things at once
+                --> raw thread
+                --> thread pools :- Custom ThreadPools(Web server), ForkJoin Pool, Executor Svc.
+                --> Require >1 cpu cores
+
+
+Problem is of two types :-
+ 1.) if you Field Visibility use Volatile mostly flag based use-case
+ 2.) If you had compound operation then atomic
+     Solution  can be
+    We cannot use Synchronization ( Due to simultaneuously read and write ) because we had compound operation not Atomic like in Single time
+           1.) Synchronized block
+           2.) AtomicInteger val = new AtomicIntege --> val.incrementAndGet ( responsibility of jvm )  Mostly Counter
+
+
+ThreadLocal :-
+Per thread instance for memory efficiency and thread safety
+
+It's helping us in two ways
+1.) New Objects are not associated with tasks lets say tomorrow 1000
+2.) If accessing object by threads are not thread safe then it will produce inconsistency
+
+Some Advantages :-
+1.) Each thread will get it's own copy
+2.) No synchronization
+3.) User context Holder
+4.) Also make sure to clean thread local data once request is over, if possible use local variable, Delegate to framework
+
+
+
+
+
+
+
+Thread pools :-
+
+    * Collection of worker or threads
+    * Threads can be re-use
+    * We can save thread creation time
+    * If all thread is busy then task is put Queue
+    * Lifecycle not need to manage of threads : Kill , Create new
+    * Increase the performance
+    * Internally it uses BlockingQueue to manage the tasks for Fetch and Execute it
+
+    I -> Executor --> extends --> ExecutorService --> ScheduleES
+
+    Shutdown :- After calling executor will not accept new task , continue with already submitted task
+    AwaitTermination :- Optional Functionality, use to call after shutdown to check successfully shutdown or not
+    ShutdownNow :- Stops/interrupt the executor asap., Halt the processing of task which are waiting.
+
+    Methods :- ::execute( your task ) , :: sumbit( your task )
+
+    Different Implementation:-
+        * ThreadPoolExecutor :-
+              for any new task --> check with min then put in Q then if needed increase to Max but
+                 if any free fetch from Q otherwise rejects
+
+        * ForkJoinPool --> check for available no. of processor and customizable as well
+        * ScheduledThreadPoolExecutor -->
+
+
+
+        Executors
+         > FixedThread :-
+         > CacheThread
+         > NewSingleThread : Best useful to maintain order of execution task
+         > WorkStealingPool : It uses fork join pool executor to complete task
+                              It had some more power then ordinary flow
+                              Thread-pool threads had it's own DE-Queue apart from submission Que
+                              Only possible If I extend Recursive Task ( return value ) , Recursive Action ( do not return ) --> Basically fork and then join task
+                              priority -> own queue >> then submission queue >> can I steal some task from other Threads queue
+                              On task submit it goes --> submission Q
+                              On task fork it goes ---> Work stealing Q
+
+         FixedThreadPool, CachedThreadPool, and SingleThreadExecutor use ThreadPoolExecutor internally with varying configurations.
+
+     Future :-
+
+            Is a interface represent result of a task
+            * Computation is completed ,
+            * It like place-holder
+            * Get the result
+            * take care of exception
+            Two things it has onSubmit -> State and Runnable task
+            Normally if runnable then its Void
+
+
+     Callable :-
+           It represent the task which needs to executed just like runnable.
+            * Runnable does had any return type.
+            * Callable has capability to return the value.
+            * We can pass Object in runnable also.
+            * Executor method is submit but for Callable Task and
+                                                Runnable Task it is execute
+
+
+     Completable Future :-
+         Introduced in java 8, async prog.
+         Advanced version of future
+         Like chaining
+          methods :-
+          supplyAsync(supplier) --> takes thread from forkjoin pool
+          supplyAsync(supplier, poolExecutor) --> takes thread from define pool executor
+
+          thenApply --> Uses same threads which completed previous async task, as Synchronously
+          thenApplyAsync --> Uses different thread due to  pool executor need to pass
+
+
+          For async tasks we can bring ordering ( when task depend ) using below
+          thenCompose ->
+          thenComposeAsync ->
+
+
+          Generally end stage ,in the chain of sync operations -> return CompletableFuture<Void>
+          It does not return anything
+          thenAccept -->
+          thenAcceptAsync -->
+
+          use to combine result of 2 comparable operations like two supplyAsync
+          thenCombine
+          thenCombineAsync
+
+
+---------------
+
+Java Memory Management & Garbage Collections :-
+     Heap, Stack, Method Area, Native memory, PC register ( it's per thread )
+
+     Java memory : stack and heap created by JVM both are store in RAM.
+     Generally size of heap >> stack
+1
+     Stack :-
+      * Store temporary variable
+      * Primitives
+      * Separate memory for block of method
+      * obj reference store
+      * Thread level data
+      * evey level is cleared in LIFO. when it fulls stack over flow error.
+
+      Heap
+      * created in heap
+      * String pool
+      * Stores actual object
+
+
+      Strong vs Weak Reference ( Clean by JVM when runs gc ) vs Soft Reference (It's type of weak but clean if urgent for JVM )
+
+      GC is used to collect object does not had references.
+            case 1 : Null reference object
+            case 2 : reference changes
+            case 3 : anonymous object like new Emp()
+
+      JVM controls to run it. and when run it never guarantee
+
+      Heap --> Young gen + Old gen
+               Young gen --> Eden ( first new object goes here ) + S0 + s1
+
+      Non-heap --> meta space ( till java 7 version this is called perm gen and was part of heap )
+                   It store class variable , constants, class meta
+                   It is expandable as well.
+
+      when 1st GC run :-
+      Mark and sweep --> mark objs has no more ref. and
+                         sweep live one from eden to s0 and age is added also called minor gc.
+
+      when 2nd GC
+       Mark and sweep and  move objects from eden to s0 and s1 and age increments
+       and age always had thresholds then from Young Gen --> Old Generation (known as Major GC ) means remove from Old Gen
+
+       Algo :-
+       1.) Mark and sweep
+       2.) Mark and sweep with compaction
+
+       Different version of GC :-
+       1.) Serial GC --> uses single thread --> Very expensive , slow
+       2.) Parallel GC --> default in java 8 --> fast , but less pause time above (Y.G has More threads , then O.G )
+       3.) Parallel Old GC ---> (Y.G and O.G has same threads )
+       4.) Concurrent mark and sweep ( CMS ) --> In java 17 and in parallel gc threads are working and no memory compaction ( More tuning and less pause time)
+       5.) G1 Garbage Collector (G1GC) --> memory compaction + CMS ( based on garbage first )
+       6.) ZGC -> jdk 15 to 17 , it is parallel and concurrent
+
+       perm space (part of heap, less memory due to internal heap  ) vs metaspace (seperate from heap, uses OS size space )
+       GC is like a daemon thread
+
+---------------
+
+Virtual Threads Concept :-
+
+    Normal threads :-
+     * Also known as native or OS level thread.
+     * Java calls OS for creation. so slow, directly linked with JVM so highly dependent.
+     * JVM is b/w platform thread and O.S thread as this is one to one mapping.
+     * Each thread has class present called thread Local example :- main, t1, t2  etc ...
+     * Remember to clean up, if reusing the thread.
+     * threadLocal.set("name"), threadLocal.remove()
+     * More dependency on OS threads
+
+
+    Virtual threads ( Platform thread ) :- Introduced in JDK 19
+     * Used for higher throughput not Latency.
+     * JVM had more controls like creation, waiting, instant processing
+     * Here these is no mapping one to one only when it does the real work b/w VT, PT, OS
+
+---------------
+
+New jdk feature :-
+ some key factor :-
+
+ Throughput
+ Latency
+
+java 7 : Try-with-Resources ( automatically closing resources. ) , New I/O : Path and Files API , Fork/Join Framework ,Concurrency Utilities
+
+java 8 :  Lambda Expressions ( functionality as a method argument ), Stream API,  Optional Class, Default Static Private Methods in Interfaces, Method References, Date API
+          * Default method can overriden but not for static
+
+
+
+Java 9 --> export module which helps use java class inside module, private method in interface, CMS DEPRECATION zgc is introduced, AOT introduced, Private and Private Static Method in Interface
+
+java 11 --> new http client api ( sync, async ) , var keyword in lambda,
+java 12 --> enhanced switch statement , String literal , low pause GC time using java threads , mirco-bench mark suit inbuilt jdk
+            , promptly return un-used memory to os after low app activity earlier it return after full GC / concurrent cycle
+
+java 13 ---> yield keyword so break is removed,  text block in same format using triple quotes easy for JSON,
+             restricted to max gc pause time to 10 ms and it works concurrently without stopping all, Socket API improvement
+
+
+
+main is called by JRE
+
+static means method hiding concept
+Serialzie data -> binary format, if we store this date in file then cause issue, prefer json
+Not Serialzible Exception  to avoid mark transiant and make that object custom seralizable
+transiant can be use case for password
+memory leaks -> static field reference, collections object, Holding the object reference like no callback in memory
+young vs old generation
+spring boot using classpath check which server to mock up
+
+
+Spring propogation & transaction management
+SQL joins
+Aware Interface
+bean lifecycle
+
+prototype bean --> singletone
+
+even odd java8
+
+-------------
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,57 @@
+So, the idea is say we have 100 connections in the pool, 20 clients are using 20 connections, so pool now has 80 available connections for new clients. Once these 20 clients are done, these 20 connections will go back to the pool and make 100 connections available for usage.
+
+
+// Online Java Compiler
+// Use this editor to write, compile and run your Java code online
+
+/*
+CONNECTION POOLING CODE
+
+Requirements -
+Provide user with a connection if available in the connection pool
+Enable user to execute query using the connection
+Enable the connection closure
+Add the connection to the connection pool on closing the connection
+Security
+Handle concurrency
+We do not want clients to control the lifecycle of connection.
+*/
+
+// The interfaces - you can not change these
+interface ConnectionPool {
+  Connection getConnection();
+}
+
+// Assume there is an implementation of Connection
+interface Connection {
+// simply closes the connection
+  void close();
+  // this is the least interesting part to this problem
+  Object execute(Object query);
+}
+
+// Example of your users using your pool:
+Connection con = connectionPool.getConnection();
+try {
+    con.execute(query);
+} finally {
+    con.close();
+}
+
+// Your implementation: you can add or change anything here
+class MyConnectionPool implements ConnectionPool {
+
+    Queue<Connection> queue;
+    MyConnectionPool(final List<Connection> connections) {
+        queue = new LinkedList<>(connections.size());
+      for (Connection con : connections) {
+          queue.add(con);
+        }
+    }
+
+    Connection getConnection() {
+	    if (!queue.isEmpty()) {
+  		    return queue.remove();
+        }
+    }
+}

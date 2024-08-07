@@ -1,0 +1,359 @@
+
+1.) ArrayList VS Linked List
+
+Array better in GET
+ArrayList better in GET
+LinkedList better in ADD,UPDATE,DELETE
+
+
+
+2.) Cloning in java
+
+A a = new A();
+a.x = 10;
+a.x = 20;
+
+A a1 = (A1) a.clone();   // using cloneable interface work as both (deep and shallow)
+
+Shallow Copy:
+By default, the clone method in Java typically creates a shallow copy.
+This means that primitive fields (like int in this case) are copied by value,
+ while references to objects are copied by reference.
+
+
+
+3.) Shallow copy vs Deep copy
+
+Shallow copy =>
+Here 1 object with 2 reference
+
+example :
+
+A a = new A();
+a.x = 10;
+a.x = 20;
+
+A a1 = a
+
+[Disadvantages]  both reference to same object (in heap)
+
+-----
+Deep copy =>
+In total 2 objects and 2 reference
+[ Hard copy of each value one by one ]
+A a = new A();
+a.x = 10; // x = 10
+a.y = 20; // y = 20
+
+A a1 = new A();   // x = 0 , y = 0
+a1.x = a.x; // x = 10
+a1.y = a.y; // y = 20
+
+[Disadvantages]  Manual copy let say in future you have 50 param or more
+
+
+---
+Stack using LinkedList
+// LIFO => Add first , remove first
+// push, pop
+
+
+Queue using LinkedList
+// FIFO =>     53->2
+// ADD last, remove first
+
+
+---
+
+5.) Immutable VS Final
+
+final means that you can't change the object's reference
+to point to another reference or another object, but you
+can still mutate its state (using setter methods e.g).
+Where immutable means that the object's actual value can't be changed,
+but you can change its reference to another one. (if that is not final )
+
+* Final restricts reference changes, but doesn't guarantee immutability.
+* Immutability ensures the object's state cannot be modified.
+* Final fields are often used to achieve immutability.
+
+
+6.) Serialize:
+Serialization is the process of converting an object
+into a stream of bytes to store the object or
+transmit it to memory, a database, or a file.
+Its main purpose is to save the state of an object in order to be
+able to recreate it when needed.
+The reverse process is called deserialization
+
+7.) Markup Interface : Cloneable , Serializable
+
+9.) Transiant
+
+10.) Djaksta alog => The Shortest path in terms of Weights
+
+     BFT (breadth first traversal ) => The Shortest path in terms of Edges
+
+
+11.)
+ MST -> Prisms , Kruskal's
+
+ Dijkstra =>  vertex , cumulative cost so far, path sof far
+  prism     =>  vertex and parent only,  and edge cost
+
+
+12.) Unboxing => It is the reverse process of autoboxing
+
+Integer a=new Integer(3);
+int i=a.intValue();//converting Integer to int explicitly
+int j=a;//unboxing, now compiler will write a.intValue() internally
+
+Autoboxing => The automatic conversion of primitive data type into its
+corresponding wrapper class is known as autoboxing.
+int a=20;
+Integer i=Integer.valueOf(a);//converting int into Integer explicitly
+
+
+13.)  What is functional interface ?
+An Interface contains single abstract method and contains as many
+default and static methods.
+
+Lambda is only abstract method in functional Interface.
+
+Eg : Runnable --> run, callable --> call, comparator -> compare, comparable -> compareTo
+
+14.) Name some more functional Interface
+
+  1.) Function  => R apply (T)
+  2.) Supplier => T get()
+  3.) Consumer  => void accept(T)
+  4.) Predicate => boolean test(T)
+
+
+16.) String ref mutable but string is immutable. , wrapper class are also Immutable same for ref like in string
+    Integer a = 10; // Wrapper class Integer, immutable
+    a = 20;         // The reference 'a' is now pointing to a new Integer object with value 20
+
+
+15.) Morrris => In, Pre ( 19th May )
+
+ Advantages : Time : O(N)
+               Space : O(1)
+               Always Iterative in Nature
+
+
+17.) call by reference --> changes in stack reference
+
+static --> data member, function , class
+
+Java is call by value by default Java always passes method arguments by value,
+making a copy of the argument (either the value for primitives or the reference for objects).
+
+
+Yes static data member can be change with object name but it's bad practice.
+
+
+18.) Compiler --> reference,
+    Runtime  by  JvM --> instance
+
+    In case of Confict --> for data member same level confict in inheritance will be resolve by reference of complier
+
+    // C p = new P() this case not allowed as P has only limited but can has someitems and some not will produce run time error
+
+19.) Advantages of boot over core spring
+    1.) Embedded tomcat
+    2.) Auto configuration
+    3.) No need to hardcode version
+    4.) No boiler plate code / boiler code
+    5.) health metric support
+
+
+20.) Setter, Getter, Autowired
+
+
+20.) Final : - reassignment not allowed for variable ,
+     If function is final method cannot be overridden in relationship it will give compile time error
+     finalize() --> On system.gc is called | is present in object class and we can override and when object is null then GC called
+
+
+21.) Hashcode :- Same hashcode means same bucket allocate to keys. (unique Id for each object )
+     equals is related to that ke same bucket m unhe same maane ya alag alag.
+
+
+24.) In case of Exception in inheritance : ex thrown by parent must not need to be handle by child but
+     if child throws need to handle by parent
+
+25.) In runtime ploy-morphism in case of Parent p = new Child() , p.m1() it will search in child then in parent
+
+26.) In above in case of static and private method in both child and parent it's not possible
+     >  Private methods are not inherited and cannot be overridden or hidden.
+        Each class has its own private methods that are independent of those in other classes.
+
+     > Method hiding occurs when a static method in a subclass has the same signature as one in its superclass.
+       The reference type determines which static method is called.
+
+27.) throw :- my throwing this exception intentionally like throw new OrderNotException()
+     throws :- next method caller needs to handle it can be main
+
+28.) We can break finally block rule by throwing exception, system.exit(0) before it.
+
+29.)  String can be create using two way
+            1.) String literal but store is String Constant pool
+            2.) new String() this one in heap + String Constant pool
+            //        Total 2 object --> 1st in heap , and 2nd in SCP
+            //        System.out.println(s2.intern().hashCode()); // 3329
+            //        System.out.println(s1.intern().hashCode()); //3329
+            //        System.out.println(s2.intern().hashCode() == s1.intern().hashCode()); //true
+
+             example :          String s2 = "hi";
+                                String s1= new String("hi");
+                                // 2 object --> 1st in heap , and 2nd in SCP
+
+
+30.) Intern method used to get reference from SCP in case need to prove like above.
+
+31.) String is immutable : String s = "java" after concat still s remains same. Some reasons :-
+    > To make sure no impact on reference one lets say someone concat or change to string object,
+    > String Pool is possible for same, java saves lot heap space,
+    > String is thread-safe hence it
+    > Since it's immutable --> String is suitable for map as key , as it hashcode is calculated at creation time.
+
+    Why Immutability Provides Thread Safety :-
+    * No State Change: Since String objects cannot be modified,
+                there's no risk of a thread modifying the state while another thread is reading it.
+
+    * No Synchronization Needed: As there's no state change, there's no need to synchronize access to String objects,
+                avoiding the performance cost associated with synchronization. Notice that there is no need
+                for any synchronization (synchronized blocks or methods) when accessing sharedString.
+
+ 32.) String mutable :- Example StringBuilder , StringBuffer
+
+ 33.) Password :-
+             String resides in SCP + heap and remains in memory. High chances to debug it by hacker
+             Char[] shows memory location on obj print, not printable logs as well
+
+ 34.) marker --> tagging interface like Cloneable, Serializable , cloneable using of instance method to check by jvm
+
+ 35.) ArrayList --> internally uses dynamic array, memory shift if delete , better for storing and access
+      LinkedList --> internally uses doubly linked list , no memory shift , better for manipulation
+
+ 36.) CopyOnWriteArrayList --> Internally while adding to list it creates separate new list so that existing not effect.
+      ConcurrentHashmap ---> It does segment level blocking rather then complete object level lock internally.
+
+ 37.) Although we had Hashtable as synchronize then why we need  ? Is Collections.Sync(Map) is same ?
+      Hashtable lock mechanism is same as MAP (means locking at whole object level ) but in  ConcurrentHashmap applies at bucket level.
+      Collections.Sync(Map) is same as HashTable as mentioned just above.
+
+  38.) Comparator :- In this functional Interface :- equals method is of object class not SAM.
+
+  39.) Can we extend FnI  with another FnI ? No, then it will bhe have 2 SAM which is not possible
+
+  40.) Find frequency of each character in string ?
+              // count frequency of each character
+              String[] split = s2.split("");
+              Map<String, Long> map = Arrays.stream(split).
+                      collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+
+              map.entrySet().forEach(e -> System.out.println(e.getKey() + " " + e.getValue()));
+
+        highest paid employee in each dept.
+        Map<String, List<Emp>> map = employee.stream.collect(Collectors.groupingBy(Employee.getName()))
+         // caclulate max
+
+     41.) CPU intensive task --> core is equal to max available core , we can get from Runtime But If CPU is common for other also then it needs consideration
+          I/O intensive task --> Higher then CPU generally , for exact you should check
+                                     * Rate of task submission and avg task wait time
+                                     * too many threads will increase memory consumption.
+
+
+42.) Pojo : Does not implement any special interfaces or extend any specific classes, having getter and setter, public class and public constructor example :- DTO
+     Java bean : Typically implements Serializable to allow the object to be serialized. ,Must have a public no-argument constructor. , Encapsulation.
+                  encapsulates many objects into one object so that we can access this object from multiple places. Moreover, it provides the easy maintenance.
+     Java Class :  Can implement interfaces and extend other classes. Can include special methods or behaviors not confined to the simplicity of P
+                   OJOs or the strict rules of JavaBeans.
+   Hierarchy :- Java class > Pojo > bean
+
+ 43.) What is classloader?
+      Classloader is a subsystem of JVM which is used to load class files. Whenever we run the java program,
+      it is loaded first by the classloader. There are three built-in classloaders in Java.
+
+    Class Loading: The JVM loads a class when it is first referenced, either directly
+       (e.g., when creating an instance of the class or accessing a static field or method)
+       or indirectly (e.g., when a method of another class calls a method of this class).
+       The class loader follows the delegation model described previously.
+
+          Bootstrap ClassLoader: This is the first classloader which is the superclass of Extension classloader.
+                                    It loads the rt.jar file which contains all class files of Java Standard Edition
+                                    like java.lang package classes, java.net package classes, java.util package classes, java.io package classes, java.sql package classes, etc.
+
+          Extension ClassLoader: This is the child classloader of Bootstrap and parent classloader of System classloader.
+                                     It loads the jar files located inside $JAVA_HOME/jre/lib/ext directory.
+
+          System/Application ClassLoader: This is the child classloader of Extension classloader.
+                                          It loads the class files from the classpath. By default, the classpath is set to the current directory.
+                                           You can change the classpath using "-cp" or "-classpath" switch. It is also known as Application classloader.
+
+
+    Class Linking: Verification, Preparation, Resolution
+
+
+    Class Initialization:
+     Static block is used to initialize the static data member. It is executed before the main method, at the time of classloading.
+
+44.) Public The classes, methods, or variables which are defined as public, can be accessed by any class or method.
+     Protected Protected can be accessed by the class of the same package, or by the sub-class of this class, or within the same class.
+     Default Default are accessible within the package only. By default, all the classes, methods, and variables are of default scope.
+     Private The private class, methods, or variables defined as private can be accessed within the class only.
+
+     restricted hirerchy --> private > protected > default > public
+
+
+45.) this cannot be assigned to any value because it always points to the current class object and this is the final reference in Java.
+46.) Can this keyword be used to refer static members? Yes
+
+47.)  How to detect a deadlock condition? How can it be avoided?
+     We can detect the deadlock condition by running the code on cmd and collecting the Thread Dump, and
+     if any deadlock is present in the code, then a message will appear on cmd.
+
+     Ways to avoid the deadlock condition in Java:
+
+     Avoid Nested lock: Nested lock is the common reason for deadlock as deadlock occurs when we provide locks to
+                        threads so we should give one lock to only one thread at some particular time.
+     Avoid unnecessary locks: we must avoid the locks which are not required.
+     Using thread join: Thread join helps to wait for a thread until another thread doesn't finish its execution
+                        so we can avoid deadlock by maximum use of join method.
+
+48.) Lock interface provides the guarantee of sequence in which the waiting thread will be given the access,
+        whereas the synchronized block doesn't guarantee it.
+
+
+49.) Java threads cannot be kill ?
+  yes there is no guarantee like with thread class no method , threadPool shutdownNow (internally calls intrrupts),
+  but we can do with Future::cancel but again no gurantee
+
+  Best way are keep checking for thread intrrupts and using volatile / atomic boolean we can maintain and check boolean flag  only
+
+  For I/o you can setTimeout :- Thread.sleep,ScheduledThreadPoolExecutor, Future.cancel
+
+
+50.) When we want certain task count to complete within but efficient ?
+ * Future / callbacks , Conditions & Locks , Phases , Completable future, Count Down latch with timeout
+
+
+
+ 51.)
+    If the superclass method does not declare an exception
+        If the superclass method does not declare an exception,
+            subclass overridden method cannot declare the checked exception but it can declare unchecked exception.
+    If the superclass method declares an exception
+        If the superclass method declares an exception,
+            subclass overridden method can declare same, subclass exception or no exception but cannot declare parent exception.
+
+
+this is the final reference in Java
+The super keyword is primarily used for initializing the base class variables
+    within the derived class constructor whereas this keyword primarily used to differentiate
+    between local and instance variables when passed in the class constructor.
+
+
+This procedure is called exception propagation. By default, checked exceptions are not propagated.
