@@ -1,0 +1,45 @@
+
+Some key concepts :-
+
+
+Pre-signed URLs :
+  * Presigned URLs are a feature provided by cloud storage services, such as Amazon S3, that allow temporary access to private resources.
+  * These URLs are generated with a specific expiration time, after which they become invalid, offering a secure way to share files without altering permissions.
+
+Fingerprint :
+	 * is a mathematical calculation that generates a unique hash value based on the content of the file.
+	 * This hash value, often created using cryptographic hash functions like SHA-256, serves as a robust and unique identifier for the file regardless of its name or the source of the upload.
+	 * By computing this fingerprint, we can efficiently determine whether the file, or any portion of it, has been uploaded before.
+
+	 For resumable uploads, the process involves not only fingerprinting the entire file but also generating fingerprints for each individual chunk.
+	 This chunk-level fingerprinting allows the system to precisely identify which parts of the file have already been transmitted.
+
+	 * For upload, chunking, beyond being useful for resumable uploads, also plays a significant role in speeding up the upload process.
+	 * While bandwidth is fixed (put another way, the pipe is only so big), we can use chunking to make the most of the bandwidth we have.
+	 * By sending multiple chunks in parallel, and utilizing adaptive chunk sizes based on network conditions, we can maximize the use of available bandwidth.
+
+
+* One important fact about compression is that you should always compress before you encrypt in cases where encryption is necessary.
+  This is because encryption naturally introduces randomness into the file, which makes it difficult to compress.
+  By compressing before encrypting, you will achieve a much higher compression ratio.
+
+* Replication and sharding are common techniques to satisfy availability and scalability requirements.
+
+* Relational databases do not handle long tail of data well. When the indexes grow large, random access is expensive.
+
+
+* client --> image to base 64 media ---> transfer --> Websocket --> server can decode --> then get the media back
+
+
+* Cient server vs peer-peer protocol ( XMPP )
+
+* Image can be save in File , BLOB, CLOB
+
+* quad_tree --> elastic search
+
+
+  100,000 character --> 100 000 byte
+
+* Netflix --> video formats is codec means quality , multiple resolution   ] FFMPEG
+
+* You can have more than one index, but neither SQL or NoSQL databases use more than one index inside a single shard.

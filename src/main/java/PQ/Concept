@@ -1,0 +1,6 @@
+1. If we are given to find Kth largest element,
+   toh Maxheap will give better soln which is nlogn but Minheap will give optimal ans in nlogk.
+
+And this is vice-versa for kth smallest elements
+
+Solve dono se kar saktey but Time complexity mein farak rahega.

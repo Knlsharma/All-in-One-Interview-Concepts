@@ -1,0 +1,77 @@
+
+JS is Synchronous Single threaded language
+Everything in js happend inside in execution context
+
+execution context :-
+
+    variable
+    functions
+      above both called Memory component.
+
+    Code component : contains code in which each line of code is executed one line at a time once
+    previous line finished also called Thread of execution
+
+
+* When code run a global exec. is created
+During first iteration
+  Two phase
+  * Memory phase : Allocate memory to variable ( with undefined value ) and functions ( with whole code ).
+     Note : for variable actual value is not given yet during initialization.
+ During Second iteration
+  * Variable with value is replaced
+  * Functions are skip
+  * Function Invocation happened when encounter and new Exec Context is created
+       then again two phases same happened
+       and value assigned for variable and old execution context is deleted
+  * Code phase
+After this whole global exec is deleted
+Also call stack maintains order of execution context means : E2 <-- E1 <-- GEC
+
+
+Hoisting : You can access variable before you had initialized it.
+ Not defined : not actual allocation,  means x was not present or not initialized.  here means you trying to use but not defined
+ undefined : giving memory , Here JS gives a special placeholder later on user can assign, it's not empty,
+
+ when you convert a function to arrow func it will become variable.
+
+ Chrome has v8 engine.
+ In case of browser we had window. At global level this === window.
+ For each and every  Exec. whether ( Global or function Context )  a this is attached to window ( for global )
+
+ Even before running the statement memory is allocated. like var a = 7 --> undefined --> 7
+ // var a :- better
+ // b = undefined
+
+
+ Scope of variable :- is b inside of scope of c
+     * Every call stack has lexical
+     * If still not found the b is not defined
+
+ Loose type nature b/w variable and datatype , means later on you can assign something different to same.
+
+ Let and const declaration are hoisted
+ // var is in global space
+ // let and const are stored in seperate memory space and to use we need to assign a value
+
+
+ Temporal Dead Zone --> It is time from a let variable is hoisted to till it initialized. During this phase you cannot initialization.
+
+ let is more strict var
+  * re-delcartation
+  * re-duplication
+
+
+  Syntax vs Tyoe error
+  Reference error vs temporal dead zone error
+
+  Dev practice : const > let ( it has temporal ) > var
+
+
+  {
+   //  compound statement
+   var // is in global scope
+   let and const are hoisted in block scope
+  }
+
+
+  Closure = > function + Lex scope
